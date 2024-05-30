@@ -1,40 +1,19 @@
 "use client";
 import * as React from "react";
-import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import { visuallyHidden } from "@mui/utils";
-import { Button } from "@mui/material";
 import SelectRequiredColumns from "@/app/ui/components/selectRequiredColumns";
 import FiltersModal from "./components/filter/filtersModal";
-
-interface Data {
-  id: number;
-  name: string;
-  poc: string;
-  source: string;
-  email: string;
-  lastTalk: string;
-  nextTalk: string;
-  status: string;
-}
+import EnhancedTableHead from "./components/tableHeader";
+import { Data, DataKey, HeadCell, Order } from "./types/leads.model";
+import EnhancedTableToolbar from "./components/filter/toolbar";
 
 const rows = [
   {
@@ -149,8 +128,6 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-type Order = "asc" | "desc";
-
 function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key
@@ -177,14 +154,6 @@ function stableSort<T>(
   });
   return stabilizedThis.map((el) => el[0]);
 }
-
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-  numeric: boolean;
-}
-type DataKey = keyof Data;
 
 const headCells: readonly HeadCell[] = [
   {
@@ -238,141 +207,6 @@ const headCells: readonly HeadCell[] = [
 ];
 
 const allColumnsIds = headCells.map((element) => element.id);
-
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-  selectedColumnsIds: string[];
-}
-
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const [headerCellsColumns, setHeaderCellsColumns] = React.useState(headCells);
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-    selectedColumnsIds,
-  } = props;
-  const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            className=""
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
-        </TableCell>
-        {headerCellsColumns
-          .filter((headCell) => selectedColumnsIds.includes(headCell.id))
-          .map((headCell) => (
-            <TableCell
-              key={headCell.id}
-              align="left"
-              padding={headCell.disablePadding ? "none" : "normal"}
-              sortDirection={orderBy === headCell.id ? order : false}
-              className=""
-            >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-              >
-                {headCell.label}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            </TableCell>
-          ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-  openFilterModal: () => void;
-}
-
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected, openFilterModal } = props;
-
-  return (
-    <Toolbar
-      className="br-28"
-      sx={{
-        borderRadius: "28px",
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          {/* Nutrition */}
-        </Typography>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton onClick={openFilterModal}>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-}
 
 export default function Leads() {
   const [order, setOrder] = React.useState<Order>("asc");
@@ -528,34 +362,31 @@ export default function Leads() {
                         />
                       </TableCell>
 
-                      {(Object.keys(row) as Array<DataKey>).map((key) => {
-                        if (selectedColumnsIds.includes(key)) {
-                          return (
-                            <>
-                              <TableCell
-                                component="th"
-                                // id={labelId}
-                                scope="row"
-                                padding="none"
-                                className=""
-                              >
-                                {row[key]}
-                              </TableCell>
-                            </>
-                          );
+                      {(Object.keys(row) as Array<DataKey>).map(
+                        (key, index) => {
+                          if (selectedColumnsIds.includes(key)) {
+                            return (
+                              <>
+                                <TableCell
+                                  component="th"
+                                  key={index}
+                                  id={labelId}
+                                  scope="row"
+                                  padding="none"
+                                  className=""
+                                >
+                                  {row[key]}
+                                </TableCell>
+                              </>
+                            );
+                          }
                         }
-                      })}
+                      )}
                     </TableRow>
                   );
                 })}
                 {emptyRows > 0 && (
-                  <TableRow
-                    style={
-                      {
-                        // height: (dense ? 33 : 53) * emptyRows,
-                      }
-                    }
-                  >
+                  <TableRow>
                     <TableCell colSpan={6} />
                   </TableRow>
                 )}
@@ -575,38 +406,6 @@ export default function Leads() {
       ) : (
         <div>No Columsn Selected</div>
       )}
-
-      {/* <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
- 
-  <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-
-  <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-    
-      <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-        <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-          <div className="sm:flex sm:items-start">
-            <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-              <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-              </svg>
-            </div>
-            <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-              <h3 className="text-base font-semibold leading-6 text-gray-900" id="modal-title">Deactivate account</h3>
-              <div className="mt-2">
-                <p className="text-sm text-gray-500">Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-          <button type="button" className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Deactivate</button>
-          <button type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> */}
     </Box>
   );
 }

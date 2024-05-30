@@ -22,7 +22,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import { Button } from "@mui/material";
-import SelectRequiredColumns from "@/ui/components/selectRequiredColumns";
+import SelectRequiredColumns from "@/app/ui/components/selectRequiredColumns";
 import FiltersModal from "./components/filter/filtersModal";
 
 interface Data {

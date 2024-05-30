@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { lusitana } from "../ui/fonts";
+import { lusitana } from "./ui/fonts";
 import styles from "./home.module.css";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 

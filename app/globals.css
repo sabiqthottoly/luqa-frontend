@@ -30,5 +30,5 @@ h1 {
 
 /* table border radius */
 .css-1mxz8qt-MuiPaper-root {
-  border-radius: 28px; 
+  border-radius: 28px !important; 
 }

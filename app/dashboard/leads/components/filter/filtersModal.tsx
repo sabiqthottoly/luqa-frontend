@@ -2,17 +2,6 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Switch from "@mui/material/Switch";
-import FilterSelection from "./filterSelction";
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import List from '@mui/material/List';
@@ -24,6 +13,9 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
+import Grid from "@mui/material/Grid";
+import FilterSelection from "./filterSelction";
+import { SelectChangeEvent } from "@mui/material";
 
 
 const Transition = React.forwardRef(function Transition(
@@ -39,6 +31,8 @@ interface FiltersModalProps {
   isOpenFiltersModal: boolean;
   closeFiltersModal: () => void;
 }
+
+type FilterKey = "Name" | "Age" | "Branch" | "POC" | "status" | "Last Talk" | "Next Talk" | "Email";
 
 const FiltersModal: React.FC<FiltersModalProps> = ({
   isOpenFiltersModal,
@@ -60,6 +54,31 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
     closeFiltersModal();
     setOpen(false);
   };
+
+  const [filterValues, setFilterValues] = React.useState<Record<FilterKey, string>>({
+    "Name": "",
+    "Age": "",
+    "Branch": "",
+    "POC": "",
+    "status": "", 
+    "Last Talk": "",
+    "Next Talk": "",
+    "Email": "",
+  });
+
+  console.log(filterValues);
+  
+
+  const handleFilterChange = (filter: string) => (event: SelectChangeEvent) => {
+    setFilterValues((prev) => ({ ...prev, [filter]: event.target.value }));
+  };
+
+  const filterOptions = [
+    { value: "", label: "None" },
+    { value: "value1", label: "Value-1" },
+    { value: "value2", label: "Value-2" },
+    { value: "value3", label: "Value-3" },
+  ];
 
   return (
     // <React.Fragment>
@@ -124,14 +143,31 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Sound
+              Filters
             </Typography>
             <Button autoFocus color="inherit" onClick={handleClose}>
               save
             </Button>
           </Toolbar>
         </AppBar>
-        <List>
+
+        <Box sx={{ p: 5 }}>
+          <Grid container spacing={4} justifyContent="center">
+            {Object.keys(filterValues).map((filter, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <FilterSelection
+                  label={`${filter}`}
+                  value={filterValues[filter as FilterKey]}
+                  options={filterOptions}
+                  onChange={handleFilterChange(filter)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
+
+        {/* <List>
           <ListItemButton>
             <ListItemText primary="Phone ringtone" secondary="Titania" />
           </ListItemButton>
@@ -142,7 +178,7 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
               secondary="Tethys"
             />
           </ListItemButton>
-        </List>
+        </List> */}
       </Dialog>
     </React.Fragment>
   );

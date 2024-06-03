@@ -11,6 +11,7 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import SelectRequiredColumns from "@/app/ui/components/selectRequiredColumns";
 import FiltersModal from "./components/filter/filtersModal";
+import AddModal from "./components/addLead/addLeadModal";
 import EnhancedTableHead from "./components/tableHeader";
 import { Data, DataKey, HeadCell, Order } from "./types/leads.model";
 import EnhancedTableToolbar from "./components/filter/toolbar";
@@ -215,6 +216,7 @@ export default function Leads() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [isOpenFiltersModal, setIsOpenFiltersModal] = React.useState(false);
+  const [addModal, setAddModal] = React.useState();
   const [selectedColumnsIds, setSelectedColumnsIds] = React.useState([
     "id",
     "name",
@@ -303,9 +305,16 @@ export default function Leads() {
     setIsOpenFiltersModal(!isOpenFiltersModal);
   };
 
+  // const handleAddModal = () => {
+  //   setAddModal(!addModal);
+  // };
+
   return (
     <Box sx={{ width: "100%" }}>
       <h1>Leads</h1>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <AddModal />
+      </Box>
       <SelectRequiredColumns
         allColumns={allColumnsIds}
         handleSelectedColumns={handleSelectedColumns}

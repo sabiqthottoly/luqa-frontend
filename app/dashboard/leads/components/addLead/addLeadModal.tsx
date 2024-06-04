@@ -149,7 +149,7 @@ import Slide from '@mui/material/Slide';
 import TextField from '@mui/material/TextField';
 import { TransitionProps } from '@mui/material/transitions';
 import Grid from '@mui/material/Grid';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { addLead } from '../../../../useRedux/leadSlice';
 
 interface FieldRowProps {
@@ -196,6 +196,9 @@ export default function FullScreenDialog() {
   });
 
   const dispatch = useDispatch();
+  const selector = useSelector(state=>state.leads.data)
+  console.log(selector,"selector");
+  
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -217,6 +220,7 @@ export default function FullScreenDialog() {
     dispatch(addLead(formData));
     handleClose();
   };
+
 
   // Define the field configuration
   const fields = [

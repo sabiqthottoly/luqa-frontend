@@ -16,6 +16,8 @@ import { TransitionProps } from '@mui/material/transitions';
 import Grid from "@mui/material/Grid";
 import FilterSelection from "./filterSelction";
 import { SelectChangeEvent } from "@mui/material";
+import { UseDispatch, useDispatch } from "react-redux";
+import { setFilterDetails } from "@/app/feature/filterSlice";
 
 
 const Transition = React.forwardRef(function Transition(
@@ -39,6 +41,7 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
   closeFiltersModal,
 }) => {
   const [open, setOpen] = React.useState(isOpenFiltersModal);
+  const dispatch = useDispatch()
   //   const [fullWidth, setFullWidth] = React.useState(true);
   //   const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
 
@@ -51,6 +54,7 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
   };
 
   const handleClose = () => {
+    dispatch(setFilterDetails(filterValues))
     closeFiltersModal();
     setOpen(false);
   };
@@ -65,8 +69,6 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
     "Next Talk": "",
     "Email": "",
   });
-
-  console.log(filterValues);
   
 
   const handleFilterChange = (filter: string) => (event: SelectChangeEvent) => {

@@ -1,5 +1,7 @@
+"use client";
 import "./globals.css";
-// import { inter } from './ui/fonts';
+import { Provider } from 'react-redux';
+import { store } from './feature/store';
 import { Inter, Lusitana } from 'next/font/google';
 
 const inter = Inter({
@@ -8,9 +10,9 @@ const inter = Inter({
   display: 'swap',
 })
 
-const lusitana = Lusitana({ 
-  weight: ['400', '700'], 
-  subsets: ['latin'] ,
+const lusitana = Lusitana({
+  weight: ['400', '700'],
+  subsets: ['latin'],
   variable: '--font-lusitana',
   display: 'swap',
 });
@@ -22,7 +24,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${lusitana.variable} antialiased`}>
-      <body>{children}</body>
+      <body>
+        <Provider store={store}>
+          {children}
+        </Provider>
+      </body>
     </html>
   );
 }

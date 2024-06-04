@@ -16,8 +16,8 @@ interface LeadsState {
   data: Lead[];
 }
 
-const initialState: LeadsState = {
-  data: [],
+const initialState = {
+  data: {},
 };
 
 export const leadsSlice = createSlice({
@@ -25,10 +25,14 @@ export const leadsSlice = createSlice({
   initialState,
   reducers: {
     addLead: (state, action: PayloadAction<Lead>) => {
-      state.data.push(action.payload);
+      console.log(action.payload);
+      
+      state.data = action.payload;
     },
   },
 });
+
+
 
 export const { addLead } = leadsSlice.actions;
 

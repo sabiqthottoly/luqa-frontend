@@ -132,8 +132,9 @@
 //   );
 // }
 
+"use client";
 
-// FullScreenDialog.tsx
+
 import * as React from 'react';
 import { useState } from 'react';
 import Button from '@mui/material/Button';

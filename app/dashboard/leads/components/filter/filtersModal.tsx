@@ -66,7 +66,6 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
     "Email": "",
   });
 
-  console.log(filterValues);
   
 
   const handleFilterChange = (filter: string) => (event: SelectChangeEvent) => {

@@ -1,6 +1,10 @@
+"use client";
+
 import "./globals.css";
+import { Provider } from 'react-redux';
 // import { inter } from './ui/fonts';
 import { Inter, Lusitana } from 'next/font/google';
+import store from "./useRedux/reduxStore";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -22,7 +26,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${lusitana.variable} antialiased`}>
-      <body>{children}</body>
+      <body> 
+        <Provider store={store}>
+          {children}
+        </Provider></body>
     </html>
   );
 }

@@ -27,11 +27,12 @@ const links = [
 ];
 
 const settingsLinks = [
-  { name: "Configuration", href: "/dashboard/settings/configuration" },
-  { name: "Resources", href: "/dashboard/settings/resources" },
-  { name: "Products", href: "/dashboard/settings/products" },
-  { name: "Product Category", href: "/dashboard/settings/product-category" },
-  { name: "Branch", href: "/dashboard/settings/branch" },
+  { name: "Roles", href: "/dashboard/roles" },
+  { name: "Staffs", href: "/dashboard/staffs" },
+  { name: "Branch", href: "/dashboard/branch" },
+  { name: "Product", href: "/dashboard/product" },
+  { name: "Resource Type", href: "/dashboard/resource-type" },
+  { name: "Nature of Business", href: "/dashboard/nature-of-business" },
 ];
 
 export default function NavLinks() {
@@ -74,7 +75,7 @@ export default function NavLinks() {
           )}
         >
           <Cog6ToothIcon className="w-6" />
-          <p className="hidden md:block">Settings</p>
+          <p className="hidden md:block">Configuration</p>
           <svg
             className={clsx("hidden fill-current sm:block ml-auto transition-transform duration-200", {
               "rotate-90": settingsOpen,

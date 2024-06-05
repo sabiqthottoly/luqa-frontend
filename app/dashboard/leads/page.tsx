@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -15,6 +15,9 @@ import AddModal from "./components/addLead/addLeadModal";
 import EnhancedTableHead from "./components/tableHeader";
 import { Data, DataKey, HeadCell, Order } from "./types/leads.model";
 import EnhancedTableToolbar from "./components/filter/toolbar";
+
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks"; // Define these hooks as shown below
+import { fetchLeads } from "./leadsSlice";
 
 const rows = [
   {
@@ -210,6 +213,9 @@ const headCells: readonly HeadCell[] = [
 const allColumnsIds = headCells.map((element) => element.id);
 
 export default function Leads() {
+  const dispatch = useAppDispatch();
+  const { leads, status, error } = useAppSelector((state) => state.leads);
+
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data | string>("");
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -228,7 +234,13 @@ export default function Leads() {
     "status",
   ]);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchLeads());
+    }
+  }, [status, dispatch]);
+
+  useEffect(() => {
     modifyTableCellsAsperSelectedColummns();
   }, [selectedColumnsIds]);
 

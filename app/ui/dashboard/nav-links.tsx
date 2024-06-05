@@ -10,6 +10,18 @@ import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { useState } from "react";
 
+
+// Define the structure of sub-navigation links
+interface SubNavLink {
+  name: string;
+  href: string;
+}
+
+// Define the structure of section in the sub-navigation
+interface Section {
+  section: string;
+  links: SubNavLink[];
+}
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
@@ -26,13 +38,29 @@ const links = [
   }
 ];
 
-const settingsLinks = [
-  { name: "Roles", href: "/dashboard/roles" },
-  { name: "Staffs", href: "/dashboard/staffs" },
-  { name: "Branch", href: "/dashboard/branch" },
-  { name: "Product", href: "/dashboard/product" },
-  { name: "Resource Type", href: "/dashboard/resource-type" },
-  { name: "Nature of Business", href: "/dashboard/nature-of-business" },
+// const settingsLinks = [
+//   { name: "Roles", href: "/dashboard/roles" },
+//   { name: "Staffs", href: "/dashboard/staffs" },
+//   { name: "Branch", href: "/dashboard/branch" },
+//   { name: "Product", href: "/dashboard/product" },
+//   { name: "Resource Type", href: "/dashboard/resource-type" },
+//   { name: "Nature of Business", href: "/dashboard/nature-of-business" },
+// ];
+const settingsLinks: Section[] = [
+  {
+    section: "Employee", links: [
+      { name: "Roles", href: "/dashboard/roles" },
+      { name: "Staffs", href: "/dashboard/staffs" }
+    ]
+  },
+  {
+    section: "Business", links: [
+      { name: "Branch", href: "/dashboard/branch" },
+      { name: "Product", href: "/dashboard/product" },
+      { name: "Resource Type", href: "/dashboard/resource-type" },
+      { name: "Nature of Business", href: "/dashboard/nature-of-business" }
+    ]
+  }
 ];
 
 export default function NavLinks() {
@@ -96,19 +124,25 @@ export default function NavLinks() {
         </button>
         {settingsOpen && (
           <div className="ml-6 flex flex-col space-y-1">
-            {settingsLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={clsx(
-                  "flex h-[48px] grow items-center justify-start gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:px-3",
-                  {
-                    "bg-sky-100 text-blue-600": pathname === link.href,
-                  }
-                )}
-              >
-                <span className="ml-8">{link.name}</span>
-              </Link>
+            {settingsLinks.map((section) => (
+              <div key={section.section}>
+                <div className="text-sm font-medium text-gray-500 mt-2 mb-2">{section.section}</div>
+                {section.links.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={clsx(
+                      "flex h-[48px] grow items-center justify-start gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:px-3",
+                      {
+                        "bg-sky-100 text-blue-600": pathname === link.href,
+                      }
+                    )}
+                  >
+                    <span className="ml-8">{link.name}</span>
+                  </Link>
+                ))}
+                <hr className="border-gray-400" />
+              </div>
             ))}
           </div>
         )}

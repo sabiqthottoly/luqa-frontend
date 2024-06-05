@@ -50,7 +50,7 @@ export default function DataTable() {
   const [rows, setRows] = React.useState(initialRows);
   const [searchText, setSearchText] = React.useState("");
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.toLowerCase();
     setSearchText(value);
 
@@ -65,6 +65,7 @@ export default function DataTable() {
 
   return (
     <div style={{ height: 500, width: "100%" }}>
+      <h1>Products</h1>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <TextField
           label="Search"

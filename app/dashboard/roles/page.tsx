@@ -44,6 +44,7 @@ const rows = [
 export default function DataTable() {
   return (
     <div style={{ height: 400, width: "100%" }}>
+      <h1>Roles</h1>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <AddRoleModal />
       </Box>

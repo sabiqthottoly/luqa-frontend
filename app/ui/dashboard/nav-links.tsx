@@ -56,7 +56,7 @@ const settingsLinks: Section[] = [
   {
     section: "Business", links: [
       { name: "Branch", href: "/dashboard/branch" },
-      { name: "Product", href: "/dashboard/product" },
+      { name: "Product", href: "/dashboard/products" },
       { name: "Resource Type", href: "/dashboard/resource-type" },
       { name: "Nature of Business", href: "/dashboard/nature-of-business" }
     ]

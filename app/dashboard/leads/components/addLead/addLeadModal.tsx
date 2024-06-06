@@ -13,6 +13,9 @@ import Slide from '@mui/material/Slide';
 import TextField from '@mui/material/TextField';
 import { TransitionProps } from '@mui/material/transitions';
 import Grid from '@mui/material/Grid';
+import {useDispatch,useSelector} from "react-redux"
+import {AppDispatch} from "../../../../../redux/store"
+import {createLead} from "../../../leads/leadsSlice"
 
 interface FieldRowProps {
   label: string;
@@ -47,15 +50,17 @@ const Transition = React.forwardRef(function Transition(
 export default function FullScreenDialog() {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    customer_name: '',
     email: '',
-    source: '',
-    poc: '',
-    company: '',
-    phone: '',
+    source_of_lead: '',
+    comments: '',
+    state: '',
+    mobile: '',
     address: '',
-    notes: ''
+    country: ''
   });
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -72,18 +77,32 @@ export default function FullScreenDialog() {
       [name]: value
     }));
   };
-  console.log(formData);
+  
+  const handleSubmit = () => {
+    dispatch(createLead(formData));
+    handleClose();
+  };
   
   // Define the field configuration
+  // const fields = [
+  //   { label: 'Name', name: 'name' },
+  //   { label: 'Email', name: 'email' },
+  //   { label: 'Source', name: 'source' },
+  //   { label: 'Country', name: 'country' },
+  //   { label: 'State', name: 'state' },
+  //   { label: 'Phone', name: 'phone' },
+  //   { label: 'Address', name: 'address' },
+  //   { label: 'Comments', name: 'comments' }
+  // ];
   const fields = [
-    { label: 'Name', name: 'name' },
+    { label: 'Name', name: 'customer_name' },
     { label: 'Email', name: 'email' },
-    { label: 'Source', name: 'source' },
-    { label: 'POC', name: 'poc' },
-    { label: 'Company', name: 'company' },
-    { label: 'Phone', name: 'phone' },
+    { label: 'Source', name: 'source_of_lead' },
+    { label: 'Country', name: 'country' },
+    { label: 'State', name: 'state' },
+    { label: 'Phone', name: 'mobile' },
     { label: 'Address', name: 'address' },
-    { label: 'Notes', name: 'notes' }
+    { label: 'Comments', name: 'comments' }
   ];
 
   return (
@@ -110,7 +129,7 @@ export default function FullScreenDialog() {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Add Leads
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
+            <Button autoFocus color="inherit" onClick={handleSubmit}>
               Save
             </Button>
           </Toolbar>

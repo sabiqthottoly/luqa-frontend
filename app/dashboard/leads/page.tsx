@@ -15,7 +15,6 @@ import AddModal from "./components/addLead/addLeadModal";
 import EnhancedTableHead from "./components/tableHeader";
 import { Data, DataKey, HeadCell, Order } from "./types/leads.model";
 import EnhancedTableToolbar from "./components/filter/toolbar";
-
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks"; // Define these hooks as shown below
 import { fetchLeads } from "./leadsSlice";
 
@@ -430,3 +429,5 @@ export default function Leads() {
     </Box>
   );
 }
+
+

@@ -446,9 +446,10 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddModal from "./components/addLead/addLeadModal";
-
+import UpdateModal from "./components/updateLead/updateLeadModal";
+import DeleteModal from "./components/deleteLead/deleteLeadModal";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { fetchLeads } from "./leadsSlice";
+import { fetchLeads, deleteLead } from "./leadsSlice";
 
 const LeadsPage = () => {
   const dispatch = useAppDispatch();
@@ -462,6 +463,10 @@ const LeadsPage = () => {
 
   const [filterText, setFilterText] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(pageSize);
+  const [editModal, setEditModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [selectedLead, setSelectedLead] = useState(null);
+  const [selectedLeadId, setSelectedLeadId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchLeads({ page: currentPage, pageSize: rowsPerPage }));
@@ -477,14 +482,36 @@ const LeadsPage = () => {
     dispatch(fetchLeads({ page: 1, pageSize: newPageSize }));
   };
 
-  const handleEdit = (id) => {
-    // Handle edit action
-    console.log("Edit", id);
+  // const handleEdit = (id) => {
+  //   // Handle edit action
+  //   setEditModal(true)
+  //   console.log("Edit", id);
+  // };
+
+  const handleEdit = (lead) => {
+    setSelectedLead(lead);
+    setEditModal(true);
   };
 
+  const handleEditModalClose = () => {
+    setEditModal(false);
+    setSelectedLead(null);
+  };
+
+  // const handleDelete = (id) => {
+  //   // Handle delete action
+  //   console.log("Delete", id);
+  // };
+
   const handleDelete = (id) => {
-    // Handle delete action
+    setSelectedLeadId(id); // Set the selected lead ID
+    setDeleteModal(true); // Open the delete confirmation modal
     console.log("Delete", id);
+  };
+
+  const handleDeleteConfirm = () => {
+    dispatch(deleteLead(selectedLeadId)); // Dispatch the delete action
+    setDeleteModal(false); // Close the modal
   };
 
   // Extract leads from the leadsData object
@@ -540,12 +567,24 @@ const LeadsPage = () => {
                   <TableCell>{lead.country}</TableCell>
                   <TableCell>{lead.mobile}</TableCell>
                   <TableCell>
-                    <IconButton
+                    {/* <IconButton
                       aria-label="edit"
                       onClick={() => handleEdit(lead.id)}
                     >
                       <EditIcon />
+                    </IconButton> */}
+                    <IconButton
+                      aria-label="edit"
+                      onClick={() => handleEdit(lead)}
+                    >
+                      <EditIcon />
                     </IconButton>
+                    {/* <IconButton
+                      aria-label="delete"
+                      onClick={() => handleDelete(lead.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton> */}
                     <IconButton
                       aria-label="delete"
                       onClick={() => handleDelete(lead.id)}
@@ -568,6 +607,16 @@ const LeadsPage = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      <UpdateModal
+        open={editModal}
+        onClose={handleEditModalClose}
+        lead={selectedLead}
+      />
+         <DeleteModal
+        open={deleteModal}
+        onClose={() => setDeleteModal(false)}
+        onConfirm={handleDeleteConfirm}
+      />
     </Box>
   );
 };

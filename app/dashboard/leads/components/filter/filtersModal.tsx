@@ -66,9 +66,6 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
     "Email": "",
   });
 
-  console.log(filterValues);
-  
-
   const handleFilterChange = (filter: string) => (event: SelectChangeEvent) => {
     setFilterValues((prev) => ({ ...prev, [filter]: event.target.value }));
   };
@@ -81,51 +78,7 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
   ];
 
   return (
-    // <React.Fragment>
-    //   <Dialog
-    //     // fullWidth={fullWidth}
-    //     // maxWidth={maxWidth}
-    //     open={open}
-    //     onClose={handleClose}
-    //   >
-    //     <DialogTitle>Optional sizes</DialogTitle>
-    //     <DialogContent sx={{ width: "70%", height: "70vh" }}>
-    //       <DialogContentText>
-    //         <FilterSelection />
-    //       </DialogContentText>
-    //       <Box
-    //         noValidate
-    //         component="form"
-    //         sx={{
-    //           display: "flex",
-    //           flexDirection: "column",
-    //           m: "auto",
-    //           width: "fit-content",
-    //         }}
-    //       >
-    //         <FormControl sx={{ mt: 2, minWidth: 120 }}>
-    //           <InputLabel htmlFor="max-width">maxWidth</InputLabel>
-    //         </FormControl>
-    //         {/* <FormControlLabel
-    //           sx={{ mt: 1 }}
-    //           control={
-    //             <Switch checked={fullWidth} onChange={handleFullWidthChange} />
-    //           }
-    //           label="Full width"
-    //         />  */}
-    //       </Box>
-    //     </DialogContent>
-    //     <DialogActions>
-    //       <Button onClick={handleClose}>Close</Button>
-    //     </DialogActions>
-    //   </Dialog>
-    // </React.Fragment>
-
-
     <React.Fragment>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Open full-screen dialog
-      </Button> */}
       <Dialog
         fullScreen
         open={open}

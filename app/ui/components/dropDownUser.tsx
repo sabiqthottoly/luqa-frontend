@@ -3,13 +3,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/slices/authSlice";
+import { useRouter } from "next/navigation";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleLogout = () => {
     dispatch(logout());
+    router.push('/login'); 
   };
 
   const trigger = useRef<any>(null);

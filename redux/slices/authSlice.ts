@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '@/app/axios-setup/axiosInstance';
+import Cookies from 'js-cookie';
 
 // Define the initial state
 interface AuthState {
@@ -25,6 +26,8 @@ export const loginUser = createAsyncThunk(
       });
       localStorage.setItem('accessToken', response.data.tokens.accessToken);
       localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
+      Cookies.set('accessToken', response.data.tokens.accessToken, { expires: 1 }); // 1 day expiry
+      Cookies.set('refreshToken', response.data.tokens.refreshToken, { expires: 7 }); // 7 days expiry
       return response.data;
     } catch (error:any) {
         console.log(error.response.data);
@@ -41,6 +44,8 @@ const authSlice = createSlice({
     logout: (state) => {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      Cookies.remove('accessToken');
+      Cookies.remove('refreshToken');
       state.isAuthenticated = false;
     },
   },
